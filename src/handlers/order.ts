@@ -19,16 +19,53 @@ const orderRoutes = (app: express.Application) => {
 const store = new OrderDB;
 
 const index = async (_req: Request, res: Response) => {
-    const orders = await store.index()
-    res.json(orders)
+    try {
+        const authorizationHeader = (_req.headers.authorization as unknown) as string
+        const token = authorizationHeader.split(' ')[1]
+        jwt.verify(token, process.env.TOKEN_SECRET as string)
+    } catch(err) {
+        res.status(401)
+        res.json('Access denied, invalid token')
+        return
+    }
+    try {
+        const orders = await store.index()
+        res.json(orders)
+    } catch(err) {
+        res.status(400)
+        res.json(err)
+    }
 }
 
 const show = async (_req: Request, res: Response) => {
-    const order = await store.show(_req.params.id)
-    res.json(order)
+    try {
+        const authorizationHeader = (_req.headers.authorization as unknown) as string
+        const token = authorizationHeader.split(' ')[1]
+        jwt.verify(token, process.env.TOKEN_SECRET as string)
+    } catch(err) {
+        res.status(401)
+        res.json('Access denied, invalid token')
+        return
+    }
+    try {
+        const order = await store.show(_req.params.id)
+        res.json(order)
+    } catch(err) {
+        res.status(400)
+        res.json(err)
+    }
 }
 
 const create = async (_req: Request, res: Response) => {
+    try {
+        const authorizationHeader = (_req.headers.authorization as unknown) as string
+        const token = authorizationHeader.split(' ')[1]
+        jwt.verify(token, process.env.TOKEN_SECRET as string)
+    } catch(err) {
+        res.status(401)
+        res.json('Access denied, invalid token')
+        return
+    }
     const order: Order = {
         user_id: _req.body.userId,
         status: 'active',
@@ -43,6 +80,15 @@ const create = async (_req: Request, res: Response) => {
 }
 
 const addProduct = async (_req: Request, res: Response) => {
+    try {
+        const authorizationHeader = (_req.headers.authorization as unknown) as string
+        const token = authorizationHeader.split(' ')[1]
+        jwt.verify(token, process.env.TOKEN_SECRET as string)
+    } catch(err) {
+        res.status(401)
+        res.json('Access denied, invalid token')
+        return
+    }
     const prodInOrder: ProdInOrder = {
         orderId: _req.params.id,
         productId: _req.body.productId,

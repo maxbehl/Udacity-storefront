@@ -60,3 +60,4 @@ Test
 
 # PORT SERVER
 - The server is running on: localhost:3000//
+- The Postgres database is running on the default port 5432

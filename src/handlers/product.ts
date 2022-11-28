@@ -16,13 +16,23 @@ const productRoutes = (app: express.Application) => {
 const store = new ProductDB;
 
 const index = async (_req: Request, res: Response) => {
-    const products = await store.index()
-    res.json(products)
+    try {
+        const products = await store.index()
+        res.json(products)
+    } catch(err) {
+        res.status(400)
+        res.json(err)
+    }
 }
 
 const show = async (_req: Request, res: Response) => {
-    const product = await store.show(_req.params.id)
-    res.json(product)
+    try {
+        const product = await store.show(_req.params.id)
+        res.json(product)
+    } catch(err) {
+        res.status(400)
+        res.json(err)
+    }
 }
 
 const create = async (_req: Request, res: Response) => {
